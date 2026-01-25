@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>For You</title>
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital@0;1&family=Poppins:wght@300;400&display=swap');
+
+* { margin:0; padding:0; box-sizing:border-box; }
+
+body {
+    height:100vh;
+    background: radial-gradient(circle at top, #2b0019, #0b0010);
+    color:#fff;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    overflow:hidden;
+    font-family:'Poppins', sans-serif;
+}
+
+/* Ambient Background Effects */
+.glow {
+    position:absolute;
+    width:500px;
+    height:500px;
+    background:rgba(255,120,170,0.15);
+    filter:blur(120px);
+    animation:pulse 6s infinite alternate;
+}
+
+.container {
+    max-width:720px;
+    padding:50px;
+    text-align:center;
+    z-index:2;
+    position: relative; /* Needed for absolute positioning context if we wanted to contain it, but we let the button roam free */
+}
+
+/* Typography */
+h1 {
+    font-family:'Playfair Display', serif;
+    font-size:3em;
+    font-weight:400;
+    opacity:0;
+    animation:fadeUp 2s forwards;
+    text-shadow: 0 0 10px rgba(255,255,255,0.3);
+}
+
+p {
+    margin-top:25px;
+    font-size:1.2em;
+    line-height:1.9;
+    opacity:0;
+    animation:fadeUp 2s forwards;
+    animation-delay:1.2s;
+}
+
+/* Button Styling (Merged Style) */
+button {
+    margin-top:35px;
+    background:rgba(255,255,255,0.05);
+    border:1px solid rgba(255,255,255,0.4);
+    color:white;
+    padding:14px 45px;
+    font-size:1.05em;
+    border-radius:50px;
+    cursor:pointer;
+    opacity:0;
+    animation:fadeUp 2s forwards;
+    animation-delay:2.5s; /* Delays button appearance slightly */
+    transition:0.4s;
+    backdrop-filter: blur(5px);
+    margin-left: 10px;
+    margin-right: 10px;
+}
+
+button:hover {
+    background:rgba(255,255,255,0.15);
+    transform:scale(1.05);
+    box-shadow: 0 0 15px rgba(255,255,255,0.3);
+}
+
+/* Specific style for the No button so it can move freely */
+#noBtn {
+    position: absolute; /* Allows it to break out of the flow */
+    transition: 0.1s; /* Faster transition for the movement so it feels snappy */
+}
+
+input {
+    margin-top:20px;
+    padding:15px;
+    width:70%;
+    background:rgba(255,255,255,0.1);
+    border:1px solid rgba(255,255,255,0.3);
+    border-radius:30px;
+    color:white;
+    font-size:1em;
+    text-align:center;
+    outline: none;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+input::placeholder {
+    color: rgba(255,255,255,0.6);
+}
+
+.hidden { display:none; }
+
+/* Animations */
+@keyframes fadeUp {
+    from { opacity:0; transform:translateY(30px); }
+    to { opacity:1; transform:translateY(0); }
+}
+
+@keyframes pulse {
+    from { transform:scale(1); }
+    to { transform:scale(1.2); }
+}
+
+span {
+    position:absolute;
+    width:2px;
+    height:2px;
+    background:white;
+    opacity:0.4;
+    animation:fall linear infinite;
+    z-index: 1;
+}
+
+@keyframes fall {
+    from { transform:translateY(-10vh); }
+    to { transform:translateY(110vh); }
+}
+</style>
+</head>
+
+<body>
+
+<div class="glow"></div>
+
+<div class="container" id="scene1">
+    <h1>There is something  
+        I’ve been carrying quietly</h1>
+    <p>
+        Not loud. Not rushed.  
+        Just a feeling that stayed…  
+        the moment my heart found yours.
+    </p>
+    <button onclick="next()">Continue</button>
+</div>
+
+<div class="container hidden" id="scene2">
+    <h1>In a world full of almosts,</h1>
+    <p>
+        you became my certainty.  
+        The calm I didn’t know I was searching for.
+    </p>
+    <button onclick="toCalculator()">One More Moment</button>
+</div>
+
+<div class="container hidden" id="calculator">
+    <h1>Love Calculator</h1>
+    <p>
+        Just curiosity…  
+        but some answers are already written.
+    </p>
+    <input type="text" placeholder="Your Name">
+    <input type="text" placeholder="My Name" style="margin-top: 10px;">
+
+    <button onclick="calculate()">Calculate Love</button>
+</div>
+
+<div class="container hidden" id="result">
+    <h1>100% ❤️</h1>
+    <p>
+        You are <strong>100% compatible</strong> for me.  
+        Not by chance.  
+        Not by numbers.  
+        But by choice.
+    </p>
+    <button onclick="final()">One Last Thing</button>
+</div>
+
+<div class="container hidden" id="scene3">
+    <h1>So this is me, choosing you</h1>
+    <p>
+        Today.  
+        On Valentine’s Day.  
+        And in all the quiet tomorrows.
+        <br><br>
+        <strong>Will you be mine?</strong>
+    </p>
+    
+    <div style="margin-top: 50px; height: 60px;"> <button onclick="yes()">Yes 🤍</button>
+        <button id="noBtn" onmouseover="moveButton()">No</button>
+    </div>
+</div>
+
+<div class="container hidden" id="scene4">
+    <h1>You are my favorite yes</h1>
+    <p>
+        From this moment on,  
+        it’s you — and only you.  
+        Thank you for choosing me.
+    </p>
+</div>
+
+<script>
+// --- Navigation Logic (Code 1) ---
+function next(){
+    scene1.classList.add("hidden");
+    scene2.classList.remove("hidden");
+}
+
+function toCalculator(){
+    scene2.classList.add("hidden");
+    calculator.classList.remove("hidden");
+}
+
+function calculate(){
+    // Simulate a calculation delay for effect
+    calculator.classList.add("hidden");
+    result.classList.remove("hidden");
+}
+
+function final(){
+    result.classList.add("hidden");
+    scene3.classList.remove("hidden");
+}
+
+function yes(){
+    scene3.classList.add("hidden");
+    scene4.classList.remove("hidden");
+    // Optional: Add the alert from Code 2 if you want, but the scene transition is nicer
+    // alert("Yay!! I love you! 💕"); 
+}
+
+// --- The "Runaway Button" Logic (Code 2) ---
+function moveButton() {
+    var x = Math.random() * (window.innerWidth - 150); // Subtracting button width to keep in view
+    var y = Math.random() * (window.innerHeight - 150); // Subtracting button height
+    
+    var btn = document.getElementById('noBtn');
+    
+    // We switch position to fixed/absolute globally so it can fly anywhere on screen
+    btn.style.position = 'fixed'; 
+    btn.style.left = x + 'px';
+    btn.style.top = y + 'px';
+}
+
+// --- Background Animation (Code 1) ---
+for(let i=0;i<60;i++){
+    let s=document.createElement("span");
+    s.style.left=Math.random()*100+"vw";
+    s.style.animationDuration=(Math.random()*6+6)+"s";
+    s.style.opacity=Math.random();
+    document.body.appendChild(s);
+}
+</script>
+
+</body>
+</html>
