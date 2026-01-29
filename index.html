@@ -36,7 +36,7 @@ body {
     padding:50px;
     text-align:center;
     z-index:2;
-    position: relative; /* Needed for absolute positioning context if we wanted to contain it, but we let the button roam free */
+    position: relative; 
 }
 
 /* Typography */
@@ -58,7 +58,7 @@ p {
     animation-delay:1.2s;
 }
 
-/* Button Styling (Merged Style) */
+/* Button Styling */
 button {
     margin-top:35px;
     background:rgba(255,255,255,0.05);
@@ -70,7 +70,7 @@ button {
     cursor:pointer;
     opacity:0;
     animation:fadeUp 2s forwards;
-    animation-delay:2.5s; /* Delays button appearance slightly */
+    animation-delay:2.5s;
     transition:0.4s;
     backdrop-filter: blur(5px);
     margin-left: 10px;
@@ -85,8 +85,8 @@ button:hover {
 
 /* Specific style for the No button so it can move freely */
 #noBtn {
-    position: absolute; /* Allows it to break out of the flow */
-    transition: 0.1s; /* Faster transition for the movement so it feels snappy */
+    position: absolute; 
+    transition: 0.1s; 
 }
 
 input {
@@ -136,10 +136,28 @@ span {
     from { transform:translateY(-10vh); }
     to { transform:translateY(110vh); }
 }
+
+/* Tiny Music Control (Bottom Right) */
+.music-control {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    z-index: 10;
+    font-size: 20px;
+    opacity: 0.5;
+    cursor: pointer;
+    transition: 0.3s;
+}
+.music-control:hover { opacity: 1; }
 </style>
 </head>
 
 <body>
+
+<audio id="bgMusic" loop>
+    <source src="song.mp3" type="audio/mpeg">
+    Your browser does not support the audio element.
+</audio>
 
 <div class="glow"></div>
 
@@ -210,9 +228,22 @@ span {
     </p>
 </div>
 
+<div class="music-control" onclick="toggleMusic()">🎵</div>
+
 <script>
-// --- Navigation Logic (Code 1) ---
+// --- Navigation Logic ---
+
 function next(){
+    // 1. TRY TO PLAY AUDIO
+    // We play it here because browsers block "auto-play" on load.
+    // User interaction (clicking this button) allows us to start it.
+    var audio = document.getElementById("bgMusic");
+    audio.volume = 0.5; // Set volume to 50% so it's not too loud
+    audio.play().catch(function(error) {
+        console.log("Audio play failed (browser might require more interaction): " + error);
+    });
+
+    // 2. Change Scene
     scene1.classList.add("hidden");
     scene2.classList.remove("hidden");
 }
@@ -223,7 +254,6 @@ function toCalculator(){
 }
 
 function calculate(){
-    // Simulate a calculation delay for effect
     calculator.classList.add("hidden");
     result.classList.remove("hidden");
 }
@@ -236,24 +266,31 @@ function final(){
 function yes(){
     scene3.classList.add("hidden");
     scene4.classList.remove("hidden");
-    // Optional: Add the alert from Code 2 if you want, but the scene transition is nicer
-    // alert("Yay!! I love you! 💕"); 
 }
 
-// --- The "Runaway Button" Logic (Code 2) ---
+// --- Music Toggle Helper ---
+function toggleMusic() {
+    var audio = document.getElementById("bgMusic");
+    if (audio.paused) {
+        audio.play();
+    } else {
+        audio.pause();
+    }
+}
+
+// --- The "Runaway Button" Logic ---
 function moveButton() {
-    var x = Math.random() * (window.innerWidth - 150); // Subtracting button width to keep in view
-    var y = Math.random() * (window.innerHeight - 150); // Subtracting button height
+    var x = Math.random() * (window.innerWidth - 150);
+    var y = Math.random() * (window.innerHeight - 150);
     
     var btn = document.getElementById('noBtn');
     
-    // We switch position to fixed/absolute globally so it can fly anywhere on screen
     btn.style.position = 'fixed'; 
     btn.style.left = x + 'px';
     btn.style.top = y + 'px';
 }
 
-// --- Background Animation (Code 1) ---
+// --- Background Animation ---
 for(let i=0;i<60;i++){
     let s=document.createElement("span");
     s.style.left=Math.random()*100+"vw";
@@ -265,3 +302,4 @@ for(let i=0;i<60;i++){
 
 </body>
 </html>
+
